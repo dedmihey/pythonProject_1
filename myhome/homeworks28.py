@@ -9,7 +9,6 @@ class InvalidType(Exception):
 def f_1(a):
     print('Возведение в квадрат целого числа в интервале от 5 до 20 ')
     if isinstance(a, int):
-        #b = a ** 2
         pass
     else:
         raise InvalidType("Тип данных противоречит условию")
@@ -22,11 +21,9 @@ def f_1(a):
 
 
 try:
-    result = f_1(74)
+    result = f_1('cucu')
     print(result)
-except InvalidType("Тип данных противоречит условию"):
-    print('Тип данных противоречит условию')
-except InvalidInterval("Введённое число вне заданного интервала"):
-    print('Введённое число вне заданного интервала')
-
-
+except InvalidType as e:
+    print(f'Ошибка: {e}')
+except InvalidInterval as e:
+    print(f'Ошибка: {e}')
