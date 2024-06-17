@@ -3,10 +3,10 @@ def my_decor(func):
         s = func(*args, **kwargs)
         for i in range(2, s):
             if s % i == 0:
-                print('Сумма чисел - составное число')
+                print('Сумма чисел - ', s, ' составное число')
                 break
             if i == s - 1:
-                print('Сумма чисел - простое число')
+                print('Сумма чисел - ', s, 'простое число')
 
     return wrapper
 
