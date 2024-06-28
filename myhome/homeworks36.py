@@ -6,7 +6,6 @@ lock = Lock()
 
 class BankAccount:
     def __init__(self, bal, amount):
-        #         super().__init__()
         self.bal = bal
         self.amount = amount
 
@@ -42,4 +41,4 @@ ba2.start()
 ba1.join()
 ba2.join()
 
-# print('Начальный баланс ', self.bal)
+
