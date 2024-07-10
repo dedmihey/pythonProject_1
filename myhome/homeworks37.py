@@ -17,7 +17,7 @@ class Cafe(Thread):
 
     def run(self):
         for cust in range(self.custom):
-            self.queue.put(cust)
+            self.queue.put(cust)  # Клиенты подходят до открытия. Всех в очередь.
             time.sleep(1)
 
 
@@ -31,14 +31,14 @@ class Customer(Thread):
         n = 1
         for i in range(self.custom):
             time.sleep(1)
-            self.queue.get()
-            t = tables.pop(0)
+            self.queue.get()  # Первые трое быстро занимают 3 стола.
+            t = tables.pop(0)  # Четвёртому надо ждать освобождения стола.
             if n <= 3:
                 print(f'Клиент №{i + 1} занял {t}')
             else:
                 tables.append(t)
-                print(f'Клиент №{i + 1} в ожидании')
-                time.sleep(5)
+                print(f'Клиент №{i + 1} в ожидании')  # Следующие трое опять быстро
+                time.sleep(5)  # занимают 3 стола и т.д.
                 print(f'Клиент №{n - i} поел')
                 n = 0
             n += 1
@@ -57,5 +57,3 @@ t2.start()
 
 t1.join()
 t2.join()
-
-
