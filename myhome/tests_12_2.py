@@ -34,7 +34,8 @@ class TournamentTest(unittest.TestCase):
         self.assertTrue(self.all_results[3] == self.nic)
 
     def tearDown(self):
-        print(self.all_results)
+        res = {place: str(runner) for place, runner in self.all_results.items()}
+        print(res)
 
 
 if __name__ == '__main__':
