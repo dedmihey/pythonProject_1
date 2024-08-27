@@ -2,7 +2,7 @@ import unittest
 from runner_ import Runner
 from runner_ import Tournament
 
-is_frozen = False
+is_frozen = True
 
 
 class TournamentTest(unittest.TestCase):
