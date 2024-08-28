@@ -2,11 +2,15 @@ import logging
 import unittest
 from runner_4 import Runner
 
+logging.basicConfig(level=logging.INFO, filemode="w", filename="runner_tests.log", encoding="utf-8",
+                    format="%(asctime)s | %(levelname)s | %(message)s")
+
 
 class RunnerTest(unittest.TestCase):
+
     def test_walk(self):
-        runner_1 = Runner('Willi', -2)
         try:
+            runner_1 = Runner('Willi', -2)
             logging.info('test_walk выполнен успешно')
             for _ in range(10):
                 runner_1.walk()
@@ -16,8 +20,8 @@ class RunnerTest(unittest.TestCase):
             return -1
 
     def test_run(self):
-        runner_2 = Runner(555)
         try:
+            runner_2 = Runner(555)
             logging.info('test_run выполнен успешно')
             for _ in range(10):
                 runner_2.run()
@@ -28,6 +32,4 @@ class RunnerTest(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.INFO, filemode="w", filename="runner_tests.log", encoding="utf-8",
-                        format="%(asctime)s | %(levelname)s | %(message)s")
     unittest.main()
