@@ -10,18 +10,44 @@ api = ''
 bot = Bot(token=api)
 dp = Dispatcher(bot, storage=MemoryStorage())
 
-kb = ReplyKeyboardMarkup(resize_keyboard=True)
-button = KeyboardButton(text='Рассчитать')
-button2 = KeyboardButton(text='Информация')
-kb.add(button)
-kb.add(button2)
-
 kb_ = InlineKeyboardMarkup()
 button_ = InlineKeyboardButton(text='Рассчитать норму калорий', callback_data='calories')
 button_2 = InlineKeyboardButton(text='Формулы расчёта', callback_data='formulas')
 kb_.add(button_)
 kb_.add(button_2)
 
+start_kb = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text='Купить')
+        ],
+        [KeyboardButton(text='Рассчитать'),
+         KeyboardButton(text='Информация')
+         ]
+    ], resize_keyboard=True
+)
+
+buy_kb = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [InlineKeyboardButton(text='Продукт 1', callback_data='product_buying')],
+        [InlineKeyboardButton(text='Продукт 2', callback_data='product_buying')],
+        [InlineKeyboardButton(text='Продукт 3', callback_data='product_buying')],
+        [InlineKeyboardButton(text='Продукт 4', callback_data='product_buying')]
+    ]
+)
+
+
+@dp.message_handler(text='Купить')
+async def get_buying_list(message):
+    for i in range(1, 5):
+        await message.answer(f'Название: Product {i} | Описание: описание {i} | Цена: {i * 100}')
+        with open(f'files/{i}.jpg', 'rb') as img:
+            await message.answer_photo(img)
+    await message.answer('Выберите товар для покупки', reply_markup=buy_kb)
+@dp.callback_query_handler(text='product_buying')
+async def send_confirm_message(call):
+    await call.message.answer('Вы успешно приобрели продукт')
+    await call.answer()
 
 @dp.message_handler(text='Рассчитать')
 async def main_menu(message):
@@ -36,7 +62,7 @@ async def get_formulas(call):
 
 @dp.message_handler(commands=['start'])
 async def start(message):
-    await message.answer('Привет. Я бот, помогающий твоему здоровью', reply_markup=start_kb)
+    await message.answer('Привет', reply_markup=start_kb)
 
 
 class UserState(StatesGroup):
