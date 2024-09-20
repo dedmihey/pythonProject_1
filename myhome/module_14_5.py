@@ -6,10 +6,11 @@ import asyncio
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-import crud_functions
-from crud_functions import *
+# import crud_functions
+# from crud_functions import *
+from crud_functions_5 import *
 
-api = ''
+api = '7244166883:AAFa6u8HipanuT0e9N-2XIlRfQQ0Rcw1cLg'
 bot = Bot(token=api)
 dp = Dispatcher(bot, storage=MemoryStorage())
 
@@ -24,11 +25,13 @@ kb_.add(button_2)
 start_kb = ReplyKeyboardMarkup(
     keyboard=[
         [
-            KeyboardButton(text='Купить')
+            KeyboardButton(text='Купить'),
+            KeyboardButton(text='Регистрация')
         ],
-        [KeyboardButton(text='Рассчитать'),
-         KeyboardButton(text='Информация')
-         ]
+        [
+            KeyboardButton(text='Рассчитать'),
+            KeyboardButton(text='Информация')
+        ]
     ], resize_keyboard=True
 )
 
@@ -80,6 +83,49 @@ class UserState(StatesGroup):
     weight = State()
 
 
+class RegistrationState(StatesGroup):
+    username = State()
+    email = State()
+    age = State()
+    balance = 1000
+
+
+@dp.message_handler(text='Регистрация')
+async def sing_up(message):
+    await message.answer('Введите имя пользователя (только латинский алфавит)')
+    await RegistrationState.username.set()
+
+
+@dp.message_handler(state=RegistrationState.username)
+async def set_username(message, state):
+    us_ = is_included(message.text)
+    while us_:
+        await message.answer('Пользователь существует. Введите другое имя')
+        await RegistrationState.email.set()
+        await state.update_data(username=message.text)
+        us_ = is_included(message.text)
+    await state.update_data(username=message.text)
+    await message.answer('Введите свой email')
+    await RegistrationState.email.set()
+
+
+@dp.message_handler(state=RegistrationState.email)
+async def set_email(message, state):
+    await state.update_data(email=message.text)
+    await message.answer('Введите свой возраст')
+    await RegistrationState.age.set()
+
+
+@dp.message_handler(state=RegistrationState.age)
+async def set_age(message, state):
+    await state.update_data(age=message.text)
+    await state.update_data(balance=1000)
+    data = await state.get_data()
+    print(data)
+    add_users(data['username'], data['email'], data['age'])
+    await state.finish()
+
+
 @dp.callback_query_handler(text='calories')
 async def set_age(call):
     await call.message.answer('Введите свой возраст: ')
@@ -108,9 +154,8 @@ async def send_calories(message, state):
     await state.update_data(weight=message.text)
     data = await state.get_data()
     calories = 10 * int(data['weight']) + 6.25 * int(data['growth']) - 5 * int(data['age']) + 5
-    await message.answer(f'Ваша норма калорий {calories}', reply_markup=start_kb)
+    await message.answer(f'Ваша норма калорий {calories}')
 
 
 if __name__ == '__main__':
-    executor.start_polling(dp, skip_updates=True)
-
+    executor.start_polling(dp)
