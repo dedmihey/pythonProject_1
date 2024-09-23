@@ -18,7 +18,7 @@ async def create_message(username: Annotated[str, Path(min_length=5, max_length=
                                                                                               example=25)) -> str:
     user_id = str(int(max(users, key=int)) + 1)
     users[user_id] = username, age
-    return "User {user_id} is registered"
+    return f"User {user_id} is registered"
 
 
 @app.put("/user/{user_id}/{username}/{age}")
@@ -27,13 +27,13 @@ async def update_user(user_id, username: Annotated[str, Path(min_length=5, max_l
                                                                                               description="Enter age",
                                                                                               example=25)) -> str:
     users[user_id] = username, age
-    return "The user {user_id} has been updated"
+    return f"The user {user_id} has been updated"
 
 
 @app.delete("/user/{user_id}")
 async def delete_user(user_id) -> str:
     users.pop(user_id)
-    return "The user {user_id} has been deleted"
+    return f"The user {user_id} has been deleted"
 
 
 @app.delete("/user")
