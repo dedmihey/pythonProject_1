@@ -1,3 +1,5 @@
+import os
+
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
@@ -5,9 +7,10 @@ from fastapi.templating import Jinja2Templates
 import jinja2
 
 app = FastAPI()
-templates = Jinja2Templates(directory="templates")
+templates = Jinja2Templates(directory=os.path.join(os.path.dirname(__file__), 'templates'))
 
 users = []
+
 
 class User(BaseModel):
     id: int = None
@@ -22,7 +25,7 @@ async def get_us(request: Request) -> HTMLResponse:
 
 @app.get("/users/{user_id}")
 async def get_users(request: Request, user_id: int) -> HTMLResponse:
-    return templates.TemplateResponse("users.html", {"request": request, "messages": users[user_id]})
+    return templates.TemplateResponse("users.html", {"request": request, "user": users[user_id]})
 
 
 @app.post("/user/{username}/{age}")
