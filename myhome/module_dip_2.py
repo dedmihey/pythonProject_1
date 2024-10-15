@@ -34,7 +34,11 @@ plt.figure(figsize=(15, 6))
 sns.stripplot(x='region', y='purchase_frequency', color='green', data=df)
 plt.show()
 
-df = pd.read_csv("nba.csv")
-print('Данные по игрокам NBA')
-print(df)
+# df = pd.read_csv("nba.csv")
+# print('Данные по игрокам NBA')
+# print(df)
 
+df = sns.load_dataset('penguins')
+
+sns.catplot(data=df, x='island', y='bill_length_mm', kind='violin', hue='sex')
+plt.show()
